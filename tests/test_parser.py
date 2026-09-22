@@ -1,14 +1,9 @@
 """Тесты парсера командной строки."""
 
-import os
-import sys
 import unittest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-from shell_parser import ParseError, expand_vars, parse  # noqa: E402
-
-ENV = {"HOME": "/home/user", "USER": "vasya"}
+from helpers import ENV
+from shell_parser import ParseError, expand_vars, parse
 
 
 class ExpandVarsTest(unittest.TestCase):

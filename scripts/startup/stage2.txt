@@ -1,0 +1,10 @@
+# Стартовый скрипт этапа 2.
+# Показывает ввод и вывод команд; останавливается на первой ошибке.
+ls
+ls -l $USERPROFILE
+cd "$USERPROFILE/My Docs"
+cd '$USERPROFILE'
+ls ${USERNAME}_dir
+# Ошибка: скрипт остановится здесь, следующая строка не выполнится
+cd a b
+ls this-line-is-never-executed
