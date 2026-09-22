@@ -5,6 +5,7 @@ from vfs import DEFAULT_HOME, VfsError, join_path, normalize, split_path
 
 LS_FLAGS = "la"
 MAX_CD_ARGS = 1
+SINGLE_OPERAND = 1
 OPTION_PREFIX = "-"
 
 
@@ -72,7 +73,7 @@ def cmd_ls(shell, args):
             blocks.append([format_entry(path, node, "l" in flags)])
         else:
             lines = list_dir(node, flags)
-            if len(paths) > 1:
+            if len(paths) > SINGLE_OPERAND:
                 lines.insert(0, f"{path}:")
             blocks.append(lines)
     output = "\n\n".join("\n".join(block) for block in blocks)

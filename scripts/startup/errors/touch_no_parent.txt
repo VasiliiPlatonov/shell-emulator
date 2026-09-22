@@ -1,0 +1,2 @@
+# Ошибка: touch в несуществующий каталог
+touch no/such/file.txt

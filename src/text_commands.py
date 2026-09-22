@@ -8,6 +8,7 @@ from result import CommandResult
 from vfs import VfsError, normalize
 
 WC_FLAGS = "lwc"
+SINGLE_FILE = 1
 MIN_MONTH, MAX_MONTH = 1, 12
 MIN_YEAR, MAX_YEAR = 1, 9999
 YEAR_ONLY_ARGS = 1
@@ -66,7 +67,7 @@ def cmd_wc(shell, args):
         for flag in WC_FLAGS:
             total[flag] += counts[flag]
         lines.append(format_counts(counts, flags, path))
-    if len(paths) > 1:
+    if len(paths) > SINGLE_FILE:
         lines.append(format_counts(total, flags, "итого"))
     return CommandResult(output="\n".join(lines), error="\n".join(errors))
 

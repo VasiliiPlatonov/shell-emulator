@@ -5,6 +5,7 @@
 """
 
 from fs_commands import cmd_cd, cmd_ls, cmd_pwd
+from modify_commands import cmd_mv, cmd_touch
 from result import CommandResult
 from text_commands import cmd_cal, cmd_wc
 from vfs_commands import cmd_vfs_init
@@ -31,6 +32,8 @@ COMMANDS = {
     "pwd": cmd_pwd,
     "wc": cmd_wc,
     "cal": cmd_cal,
+    "mv": cmd_mv,
+    "touch": cmd_touch,
     "exit": cmd_exit,
     "vfs-init": cmd_vfs_init,
 }

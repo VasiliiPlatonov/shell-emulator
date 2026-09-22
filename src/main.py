@@ -11,6 +11,7 @@ from shell import Shell
 FONT = ("Consolas", 11)
 SCRIPT_DELAY_MS = 100
 WINDOW_SIZE = "900x600"
+HISTORY_START = 0
 
 
 class EmulatorApp:
@@ -77,7 +78,7 @@ class EmulatorApp:
     def scroll_history(self, step):
         """Листает историю команд стрелками вверх/вниз."""
         new_pos = self.history_pos + step
-        if not 0 <= new_pos <= len(self.history):
+        if not HISTORY_START <= new_pos <= len(self.history):
             return
         self.history_pos = new_pos
         self.entry.delete(0, "end")

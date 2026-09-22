@@ -1,0 +1,33 @@
+# Стартовый скрипт этапа 5: mv и touch (запускать с vfs/deep.csv)
+# Все изменения выполняются только в памяти, файл VFS не меняется.
+ls -l
+# --- touch: создать пустые файлы, в том числе в другом каталоге ---
+touch new.txt docs/draft.txt
+ls -l
+ls docs
+# touch существующего файла обновляет время изменения
+ls -l hello.txt
+touch hello.txt
+ls -l hello.txt
+# --- mv: переименование файла ---
+mv new.txt renamed.txt
+ls
+# --- mv: перенос нескольких файлов в каталог ---
+mv renamed.txt docs/draft.txt /tmp
+ls /tmp
+# --- mv: перенос каталога с содержимым и переименованием ---
+mv docs/archive /tmp/old-archive
+ls /tmp/old-archive/2025
+# --- mv: замена существующего файла ---
+wc -c /etc/hostname
+mv hello.txt /etc/hostname
+wc -c /etc/hostname
+# --- текущий каталог внутри перемещённого каталога ---
+cd docs
+mv /home/user/docs /tmp/documents
+pwd
+cd
+ls
+# --- ошибка: каталог нельзя переместить в самого себя ---
+mv /tmp /tmp/inner
+ls this-line-is-never-executed

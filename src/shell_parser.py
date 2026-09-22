@@ -10,6 +10,7 @@ import re
 VAR_PATTERN = re.compile(r"\$(\w+)|\$\{(\w+)\}")
 SINGLE_QUOTE = "'"
 DOUBLE_QUOTE = '"'
+NOT_FOUND = -1
 
 
 class ParseError(Exception):
@@ -30,6 +31,7 @@ def expand_vars(text, env=None):
         env = os.environ
 
     def replace(match):
+        """Значение переменной из найденного совпадения."""
         name = match.group(1) or match.group(2)
         return env.get(name, "")
 
@@ -43,7 +45,7 @@ def _read_quoted(line, start, quote):
     :raises ParseError: если закрывающая кавычка не найдена.
     """
     end = line.find(quote, start)
-    if end < 0:
+    if end == NOT_FOUND:
         raise ParseError(f"незакрытая кавычка {quote}")
     return line[start:end], end + 1
 

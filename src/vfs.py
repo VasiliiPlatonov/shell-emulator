@@ -143,6 +143,58 @@ class Vfs:
         parent.children[node.name] = node
         return node
 
+    def remove(self, parts):
+        """Удаляет узел из родительского каталога и возвращает его."""
+        parent = self.get_dir(parts[:-1])
+        parent.mtime = now()
+        return parent.children.pop(parts[-1])
+
+    def check_move(self, src, dst):
+        """Проверяет, что узел src можно переместить по пути dst.
+
+        :raises VfsError: с описанием причины, если перемещение
+            невозможно.
+        """
+        node = self.get(src)
+        if node is None:
+            raise VfsError(f"{join_path(src)}: нет такого файла "
+                           "или каталога")
+        if not src:
+            raise VfsError("нельзя переместить корневой каталог")
+        if dst == src:
+            raise VfsError(f"{join_path(src)}: источник и назначение "
+                           "совпадают")
+        if node.is_dir and dst[:len(src)] == src:
+            raise VfsError(f"нельзя переместить {join_path(src)} "
+                           "в собственный подкаталог")
+        self._check_target(node, dst)
+
+    def _check_target(self, node, dst):
+        """Проверяет путь назначения для перемещения узла node.
+
+        :raises VfsError: если нет родителя назначения или по пути
+            назначения лежит узел, который нельзя заменить.
+        """
+        self.get_dir(dst[:-1])
+        target = self.get(dst)
+        if target is None:
+            return
+        if target.is_dir:
+            raise VfsError(f"{join_path(dst)}: нельзя перезаписать каталог")
+        if node.is_dir:
+            raise VfsError(f"{join_path(dst)}: нельзя заменить файл "
+                           "каталогом")
+
+    def move(self, src, dst):
+        """Перемещает (переименовывает) узел; файл по dst заменяется."""
+        self.check_move(src, dst)
+        node = self.remove(src)
+        parent = self.get_dir(dst[:-1])
+        parent.children.pop(dst[-1], None)
+        node.name = dst[-1]
+        parent.children[node.name] = node
+        parent.mtime = now()
+
     def make_dirs(self, parts):
         """Создаёт каталог вместе с недостающими родителями."""
         for depth in range(1, len(parts) + 1):
