@@ -4,33 +4,12 @@
 объект CommandResult. Команды регистрируются в словаре COMMANDS.
 """
 
+from fs_commands import cmd_cd, cmd_ls, cmd_pwd
 from result import CommandResult
+from text_commands import cmd_cal, cmd_wc
 from vfs_commands import cmd_vfs_init
 
-MAX_CD_ARGS = 1
 MAX_EXIT_ARGS = 1
-LS_OPTIONS = {"-l", "-a", "-la", "-al"}
-
-
-def format_stub(name, args):
-    """Формирует вывод команды-заглушки: имя и аргументы."""
-    quoted = ", ".join(f"'{arg}'" for arg in args)
-    return f"{name}: аргументы [{quoted}]"
-
-
-def cmd_ls(_shell, args):
-    """Заглушка ls: проверяет опции и выводит имя и аргументы."""
-    for arg in args:
-        if arg.startswith("-") and arg not in LS_OPTIONS:
-            return CommandResult(error=f"ls: неверная опция '{arg}'")
-    return CommandResult(output=format_stub("ls", args))
-
-
-def cmd_cd(_shell, args):
-    """Заглушка cd: допускает не более одного аргумента."""
-    if len(args) > MAX_CD_ARGS:
-        return CommandResult(error="cd: слишком много аргументов")
-    return CommandResult(output=format_stub("cd", args))
 
 
 def cmd_exit(_shell, args):
@@ -49,6 +28,9 @@ def cmd_exit(_shell, args):
 COMMANDS = {
     "ls": cmd_ls,
     "cd": cmd_cd,
+    "pwd": cmd_pwd,
+    "wc": cmd_wc,
+    "cal": cmd_cal,
     "exit": cmd_exit,
     "vfs-init": cmd_vfs_init,
 }

@@ -6,7 +6,7 @@ import os
 from commands import COMMANDS
 from result import CommandResult
 from shell_parser import ParseError, parse
-from vfs import DEFAULT_HOME, Vfs, VfsError, split_path
+from vfs import DEFAULT_HOME, Vfs, VfsError, join_path, split_path
 from vfs_csv import load_csv
 from xml_logger import XmlLogger
 
@@ -75,8 +75,8 @@ class Shell:
 
     @property
     def prompt(self):
-        """Приглашение к вводу."""
-        return f"{self.vfs_name}$ "
+        """Приглашение к вводу: имя VFS и текущий каталог."""
+        return f"{self.vfs_name}:{join_path(self.cwd)}$ "
 
     def execute(self, line):
         """Разбирает строку, выполняет команду и пишет событие в лог.

@@ -10,6 +10,7 @@ from shell import Shell
 
 FONT = ("Consolas", 11)
 SCRIPT_DELAY_MS = 100
+WINDOW_SIZE = "900x600"
 
 
 class EmulatorApp:
@@ -18,6 +19,7 @@ class EmulatorApp:
     def __init__(self, root, shell):
         """Создаёт виджеты окна; заголовок содержит имя VFS."""
         self.root = root
+        self.root.geometry(WINDOW_SIZE)
         self.shell = shell
         self.history = []
         self.history_pos = 0

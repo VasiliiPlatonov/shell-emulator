@@ -7,7 +7,7 @@ from shell import Shell
 
 
 class CommandsTest(unittest.TestCase):
-    """Проверка команд-заглушек, exit и обработки ошибок."""
+    """Проверка общего разбора команд, exit и обработки ошибок."""
 
     def setUp(self):
         """Создаёт сеанс без журнала с тестовым окружением."""
@@ -17,24 +17,10 @@ class CommandsTest(unittest.TestCase):
         """Выполняет строку в тестовом сеансе."""
         return self.shell.execute(line)
 
-    def test_ls_stub(self):
-        """ls выводит имя и аргументы."""
-        result = self.run_line("ls -l $HOME")
-        self.assertEqual(result.output, "ls: аргументы ['-l', '/home/user']")
-        self.assertEqual(result.error, "")
-
-    def test_ls_bad_option(self):
-        """ls с неизвестной опцией — ошибка."""
-        self.assertIn("неверная опция", self.run_line("ls -z").error)
-
-    def test_cd_stub(self):
-        """cd выводит имя и аргументы."""
-        self.assertEqual(self.run_line("cd /tmp").output,
-                         "cd: аргументы ['/tmp']")
-
-    def test_cd_too_many(self):
-        """cd с двумя аргументами — ошибка."""
-        self.assertIn("слишком много", self.run_line("cd a b").error)
+    def test_env_expansion(self):
+        """Переменные окружения раскрываются перед вызовом команды."""
+        self.assertEqual(self.run_line("cd $HOME").error, "")
+        self.assertEqual(self.run_line("pwd").output, "/home/user")
 
     def test_unknown_command(self):
         """Неизвестная команда — ошибка."""

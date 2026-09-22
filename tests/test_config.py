@@ -32,7 +32,7 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(vfs_name_from_path("data/my_vfs.csv"), "my_vfs")
         self.assertEqual(vfs_name_from_path(None), "vfs")
         shell = Shell(vfs_path="x/deep.csv", env={}, user="u")
-        self.assertEqual(shell.prompt, "deep$ ")
+        self.assertEqual(shell.prompt, "deep:/home/user$ ")
 
 
 if __name__ == "__main__":

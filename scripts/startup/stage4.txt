@@ -1,0 +1,32 @@
+# Стартовый скрипт этапа 4: ls, cd, wc, cal (запускать с vfs/deep.csv)
+# --- ls: текущий каталог, скрытые файлы, подробный формат ---
+pwd
+ls
+ls -a
+ls -l
+ls -la docs
+# ls для нескольких путей и для файла
+ls /etc /tmp
+ls docs/report.txt
+# --- cd: относительный и абсолютный путь, .., домашний каталог ---
+cd docs/archive/2025
+pwd
+ls
+cd ../..
+pwd
+cd /
+ls
+cd
+pwd
+# --- wc: все счётчики, опции, несколько файлов, двоичный файл ---
+wc hello.txt
+wc -l docs/report.txt docs/poem.txt
+wc -w -c docs/poem.txt
+wc -c pictures/logo.png
+# --- cal: месяц года, текущий месяц, весь год ---
+cal 9 2026
+cal
+cal 2026
+# --- ошибка: скрипт остановится, следующая строка не выполнится ---
+cd hello.txt
+ls this-line-is-never-executed

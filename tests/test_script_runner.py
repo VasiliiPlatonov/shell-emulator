@@ -21,19 +21,20 @@ class ScriptRunnerTest(unittest.TestCase):
 
     def test_echo_input_and_output(self):
         """На экран выводится и ввод, и вывод; комментарии пропускаются."""
-        run_script(self.shell, ["# комментарий", "", "ls a"], self.write)
+        run_script(self.shell, ["# комментарий", "", "pwd"], self.write)
         self.assertEqual(self.lines, [
-            ("vfs$ ls a", False),
-            ("ls: аргументы ['a']", False),
+            ("vfs:/home/user$ pwd", False),
+            ("/home/user", False),
         ])
 
     def test_stop_on_first_error(self):
         """После первой ошибки команды не выполняются."""
-        run_script(self.shell, ["ls", "foo", "cd x"], self.write)
+        run_script(self.shell, ["ls", "foo", "cd /"], self.write)
         texts = [text for text, _ in self.lines]
         self.assertIn("foo: команда не найдена", texts)
         self.assertIn("Скрипт остановлен: ошибка в строке 2", texts)
-        self.assertNotIn("vfs$ cd x", texts)
+        self.assertNotIn("vfs:/home/user$ cd /", texts)
+        self.assertEqual(self.shell.cwd, ["home", "user"])
 
     def test_exit(self):
         """exit в скрипте возвращает код выхода."""
