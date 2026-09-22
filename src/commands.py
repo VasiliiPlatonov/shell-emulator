@@ -4,26 +4,12 @@
 объект CommandResult. Команды регистрируются в словаре COMMANDS.
 """
 
-from dataclasses import dataclass
-from typing import Optional
+from result import CommandResult
+from vfs_commands import cmd_vfs_init
 
 MAX_CD_ARGS = 1
 MAX_EXIT_ARGS = 1
 LS_OPTIONS = {"-l", "-a", "-la", "-al"}
-
-
-@dataclass
-class CommandResult:
-    """Результат выполнения команды.
-
-    :ivar output: текст для вывода пользователю.
-    :ivar error: текст ошибки или пустая строка.
-    :ivar exit_code: код завершения, если запрошен выход, иначе None.
-    """
-
-    output: str = ""
-    error: str = ""
-    exit_code: Optional[int] = None
 
 
 def format_stub(name, args):
@@ -64,4 +50,5 @@ COMMANDS = {
     "ls": cmd_ls,
     "cd": cmd_cd,
     "exit": cmd_exit,
+    "vfs-init": cmd_vfs_init,
 }

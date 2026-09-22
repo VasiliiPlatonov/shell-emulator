@@ -1,0 +1,16 @@
+path,type,mtime,data
+/etc,dir,2026-09-01T10:00:00,
+/etc/hostname,file,2026-09-01T10:00:00,ZW11bGF0b3IK
+/home,dir,2026-09-01T10:00:00,
+/home/user,dir,2026-09-01T10:00:00,
+/home/user/.profile,file,2026-09-01T10:00:00,ZXhwb3J0IFBBVEg9L2Jpbgo=
+/home/user/docs,dir,2026-09-01T10:00:00,
+/home/user/docs/archive,dir,2026-09-01T10:00:00,
+/home/user/docs/archive/2025,dir,2026-09-01T10:00:00,
+/home/user/docs/archive/2025/old.txt,file,2026-09-01T10:00:00,b2xkIGZpbGUK
+/home/user/docs/poem.txt,file,2026-09-01T10:00:00,cm9zZXMgYXJlIHJlZAp2aW9sZXRzIGFyZSBibHVlCg==
+/home/user/docs/report.txt,file,2026-09-01T10:00:00,0J7RgtGH0ZHRggrQrdGC0LDQvyAzCtCt0YLQsNC/IDQK
+/home/user/hello.txt,file,2026-09-01T10:00:00,SGVsbG8sIHdvcmxkIQo=
+/home/user/pictures,dir,2026-09-01T10:00:00,
+/home/user/pictures/logo.png,file,2026-09-01T10:00:00,iVBORw0KGgoAAAANSUhEUg==
+/tmp,dir,2026-09-01T10:00:00,

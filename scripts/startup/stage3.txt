@@ -1,0 +1,11 @@
+# Стартовый скрипт этапа 3: команды этапов 1-3 и работа с VFS.
+# Команды этапа 1 (ls и cd пока заглушки) и раскрытие переменных
+ls
+ls -l $USERPROFILE
+cd "$USERPROFILE/My Docs"
+cd '$USERPROFILE'
+# Служебная команда: заменить VFS на VFS по умолчанию
+vfs-init
+# Ошибка: vfs-init не принимает аргументов, скрипт остановится
+vfs-init extra
+ls this-line-is-never-executed

@@ -103,6 +103,9 @@ def main(argv=None):
     app = EmulatorApp(root, shell)
     for line in config.describe():
         app.write(line, "debug")
+    for line, is_error in shell.messages:
+        print(line)
+        app.write(line, "error" if is_error else "debug")
     if config.script_path:
         root.after(SCRIPT_DELAY_MS, app.run_startup_script,
                    config.script_path)
