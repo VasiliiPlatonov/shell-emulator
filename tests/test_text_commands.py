@@ -1,23 +1,20 @@
 """Тесты команд wc и cal."""
 
-import os
 import unittest
 from datetime import date
+from functools import cached_property
 
-from helpers import ENV
-from shell import Shell
+from helpers import make_shell, vfs_file
 from text_commands import cmd_cal
-
-SEVERAL = os.path.join(os.path.dirname(__file__), "..", "vfs",
-                       "several_files.csv")
 
 
 class WcTest(unittest.TestCase):
     """Проверка wc на VFS several_files.csv."""
 
-    def setUp(self):
-        """Загружает VFS; текущий каталог — корень."""
-        self.shell = Shell(vfs_path=SEVERAL, env=ENV, user="u")
+    @cached_property
+    def shell(self):
+        """Сеанс с VFS several_files.csv; текущий каталог — корень."""
+        return make_shell(vfs_path=vfs_file("several_files.csv"))
 
     def run_line(self, line):
         """Выполняет строку в тестовом сеансе."""
@@ -57,7 +54,7 @@ class WcTest(unittest.TestCase):
 
     def test_directory(self):
         """wc для каталога — ошибка."""
-        shell = Shell(env=ENV, user="u")
+        shell = make_shell()
         self.assertIn("это каталог", shell.execute("wc /home").error)
 
 

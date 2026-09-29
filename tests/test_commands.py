@@ -1,17 +1,18 @@
 """Тесты команд эмулятора."""
 
 import unittest
+from functools import cached_property
 
-from helpers import ENV
-from shell import Shell
+from helpers import make_shell
 
 
 class CommandsTest(unittest.TestCase):
     """Проверка общего разбора команд, exit и обработки ошибок."""
 
-    def setUp(self):
-        """Создаёт сеанс без журнала с тестовым окружением."""
-        self.shell = Shell(env=ENV, user="tester")
+    @cached_property
+    def shell(self):
+        """Сеанс без журнала, создаётся при первом обращении в тесте."""
+        return make_shell()
 
     def run_line(self, line):
         """Выполняет строку в тестовом сеансе."""

@@ -1,22 +1,20 @@
 """Тесты команд mv и touch на тестовой VFS deep.csv."""
 
-import os
 import unittest
+from functools import cached_property
 
-from helpers import ENV
-from shell import Shell
+from helpers import make_shell, vfs_file
 from vfs import split_path
 from vfs_csv import load_csv
-
-DEEP = os.path.join(os.path.dirname(__file__), "..", "vfs", "deep.csv")
 
 
 class ModifyTest(unittest.TestCase):
     """Общая подготовка: VFS deep.csv, текущий каталог /home/user."""
 
-    def setUp(self):
-        """Загружает VFS."""
-        self.shell = Shell(vfs_path=DEEP, env=ENV, user="u")
+    @cached_property
+    def shell(self):
+        """Сеанс с загруженной VFS deep.csv."""
+        return make_shell(vfs_path=vfs_file("deep.csv"))
 
     def run_line(self, line):
         """Выполняет строку в тестовом сеансе."""
@@ -54,7 +52,7 @@ class TouchTest(ModifyTest):
     def test_file_not_changed(self):
         """Изменения только в памяти: файл VFS не меняется."""
         self.run_line("touch new.txt")
-        self.assertIsNone(load_csv(DEEP).get(split_path(
+        self.assertIsNone(load_csv(vfs_file("deep.csv")).get(split_path(
             "/home/user/new.txt")))
 
 

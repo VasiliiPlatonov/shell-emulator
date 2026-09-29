@@ -1,20 +1,18 @@
 """Тесты команд ls, cd, pwd на тестовой VFS deep.csv."""
 
-import os
 import unittest
+from functools import cached_property
 
-from helpers import ENV
-from shell import Shell
-
-DEEP = os.path.join(os.path.dirname(__file__), "..", "vfs", "deep.csv")
+from helpers import make_shell, vfs_file
 
 
 class FsCommandsTest(unittest.TestCase):
     """Проверка навигации по VFS."""
 
-    def setUp(self):
-        """Загружает VFS deep.csv; текущий каталог — /home/user."""
-        self.shell = Shell(vfs_path=DEEP, env=ENV, user="u")
+    @cached_property
+    def shell(self):
+        """Сеанс с загруженной VFS deep.csv; каталог — /home/user."""
+        return make_shell(vfs_path=vfs_file("deep.csv"))
 
     def run_line(self, line):
         """Выполняет строку в тестовом сеансе."""

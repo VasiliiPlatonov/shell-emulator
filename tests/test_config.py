@@ -2,9 +2,9 @@
 
 import unittest
 
-import helpers  # noqa: F401
 from config import parse_args
-from shell import Shell, vfs_name_from_path
+from helpers import make_shell
+from shell import vfs_name_from_path
 
 
 class ConfigTest(unittest.TestCase):
@@ -31,7 +31,7 @@ class ConfigTest(unittest.TestCase):
         """Имя VFS берётся из имени файла без расширения."""
         self.assertEqual(vfs_name_from_path("data/my_vfs.csv"), "my_vfs")
         self.assertEqual(vfs_name_from_path(None), "vfs")
-        shell = Shell(vfs_path="x/deep.csv", env={}, user="u")
+        shell = make_shell(vfs_path="x/deep.csv")
         self.assertEqual(shell.prompt, "deep:/home/user$ ")
 
 
