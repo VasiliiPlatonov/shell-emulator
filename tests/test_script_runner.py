@@ -1,19 +1,24 @@
 """Тесты выполнения стартового скрипта."""
 
 import unittest
+from functools import cached_property
 
-from helpers import ENV
+from helpers import make_shell
 from script_runner import ScriptError, read_script, run_script
-from shell import Shell
 
 
 class ScriptRunnerTest(unittest.TestCase):
     """Проверка вывода скрипта и остановки на первой ошибке."""
 
-    def setUp(self):
-        """Создаёт сеанс и буфер вывода."""
-        self.shell = Shell(env=ENV, user="u")
-        self.lines = []
+    @cached_property
+    def shell(self):
+        """Сеанс эмулятора, создаётся при первом обращении в тесте."""
+        return make_shell()
+
+    @cached_property
+    def lines(self):
+        """Буфер вывода скрипта."""
+        return []
 
     def write(self, text, is_error):
         """Сохраняет вывод скрипта."""

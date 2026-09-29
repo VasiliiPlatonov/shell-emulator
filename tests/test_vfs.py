@@ -2,20 +2,12 @@
 
 import os
 import shutil
-import tempfile
 import unittest
+from functools import cached_property
 
-from helpers import ENV
-from shell import Shell
+from helpers import make_shell, temp_dir, vfs_file
 from vfs import Vfs, VfsError, VfsFile, join_path, normalize, split_path
 from vfs_csv import load_csv, save_csv
-
-VFS_DIR = os.path.join(os.path.dirname(__file__), "..", "vfs")
-
-
-def vfs_file(name):
-    """Путь к тестовому файлу VFS из каталога vfs/."""
-    return os.path.join(VFS_DIR, name)
 
 
 class PathTest(unittest.TestCase):
@@ -88,10 +80,9 @@ class CsvTest(unittest.TestCase):
     def test_round_trip(self):
         """Сохранённая VFS загружается обратно без потерь."""
         vfs = load_csv(vfs_file("deep.csv"))
-        with tempfile.TemporaryDirectory() as tmp:
-            path = os.path.join(tmp, "copy.csv")
-            save_csv(vfs, path)
-            copy = load_csv(path)
+        path = os.path.join(temp_dir(self), "copy.csv")
+        save_csv(vfs, path)
+        copy = load_csv(path)
         self.assertEqual([join_path(p) for p, _ in vfs.walk()],
                          [join_path(p) for p, _ in copy.walk()])
 
@@ -99,31 +90,28 @@ class CsvTest(unittest.TestCase):
 class VfsInitTest(unittest.TestCase):
     """Проверка команды vfs-init."""
 
-    def setUp(self):
-        """Копирует deep.csv во временный каталог."""
-        self.tmp = tempfile.TemporaryDirectory()
-        self.path = os.path.join(self.tmp.name, "deep.csv")
-        shutil.copy(vfs_file("deep.csv"), self.path)
-
-    def tearDown(self):
-        """Удаляет временный каталог."""
-        self.tmp.cleanup()
+    @cached_property
+    def path(self):
+        """Копия deep.csv во временном каталоге теста."""
+        path = os.path.join(temp_dir(self), "deep.csv")
+        shutil.copy(vfs_file("deep.csv"), path)
+        return path
 
     def test_loaded_on_start(self):
         """VFS загружается при запуске, имя берётся из файла."""
-        shell = Shell(vfs_path=self.path, env=ENV, user="u")
+        shell = make_shell(vfs_path=self.path)
         self.assertEqual(shell.vfs.count(), (8, 7))
         self.assertEqual(shell.vfs_name, "deep")
 
     def test_bad_vfs_falls_back(self):
         """При ошибке загрузки используется VFS по умолчанию."""
-        shell = Shell(vfs_path=vfs_file("broken/bad_type.csv"), env=ENV)
+        shell = make_shell(vfs_path=vfs_file("broken/bad_type.csv"))
         self.assertTrue(shell.messages[0][1])
         self.assertEqual(shell.vfs.count(), (2, 0))
 
     def test_vfs_init(self):
         """vfs-init заменяет VFS в памяти и перезаписывает файл."""
-        shell = Shell(vfs_path=self.path, env=ENV, user="u")
+        shell = make_shell(vfs_path=self.path)
         result = shell.execute("vfs-init")
         self.assertEqual(result.error, "")
         self.assertEqual(shell.vfs.count(), (2, 0))
@@ -131,7 +119,7 @@ class VfsInitTest(unittest.TestCase):
 
     def test_vfs_init_args(self):
         """vfs-init с аргументами — ошибка, VFS не меняется."""
-        shell = Shell(vfs_path=self.path, env=ENV, user="u")
+        shell = make_shell(vfs_path=self.path)
         self.assertIn("аргумент", shell.execute("vfs-init x").error)
         self.assertEqual(shell.vfs.count(), (8, 7))
 
